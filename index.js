@@ -87,6 +87,13 @@ async function run() {
             res.send(bookings);
         });
 
+        app.get('/bookings/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const booking = await bookingsCollection.findOne(query);
+            res.send(booking);
+        })
+
         app.post('/bookings', async (req, res) => {
             const booking = req.body;
             const query = {
@@ -157,6 +164,20 @@ async function run() {
             const result = await usersCollection.updateOne(filter, updatedDoc, options);
             res.send(result);
         });
+
+        //temporary to update price field on appointment option
+
+        // app.get('/addPrice', async (req, res) => {
+        //     const filter = {}
+        //     const options = { upsert: true }
+        //     const updatedDoc = {
+        //         $set: {
+        //             price: 99
+        //         }
+        //     }
+        //     const result = await appointmentOptionsCollection.updateMany(filter, updatedDoc, options)
+        //     res.send(result);
+        // })
 
         app.get('/doctors', verifyJWT, verifyAdmin, async (req, res) => {
             const query = {};
